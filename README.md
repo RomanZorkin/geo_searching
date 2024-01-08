@@ -62,6 +62,8 @@ stop_lon = 83.805205
 
 #### Также реализован функционал загрузки координат в форме ромба от выбранного центра координат
 
+https://colab.research.google.com/drive/1BKJvkXlxelojyEPH_ZjippBw4HlrViX6#scrollTo=iI0fiEstVcde&line=7&uniqifier=1
+
 
 На данном этапе есть потенциал ускорения работы сервиса (распараллеливать процессы, найти иной сервис)
 
