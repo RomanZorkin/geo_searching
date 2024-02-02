@@ -103,10 +103,39 @@ https://arxiv.org/abs/2307.05845
 
 # 2. Модель
 
+## 2.1. Подготовим loss функцию
+
+```python
+def hav_dist(points_1: torch.Tensor, points_2: torch.Tensor, earth_radius: int = 6371) -> torch.Tensor:
+    """"Функция для расчета расстояния между точками в км."""  
+    lat_1, lon_1 = points_1.T * math.pi / 180.0  # радианы
+    lat_2, lon_2 = points_2.T * math.pi / 180.0  # радианы
+    lat_delt = ((lat_2 - lat_1) / 2).sin() ** 2
+    lon_delt = ((lon_2 - lon_1) / 2).sin() ** 2    
+    return 2 * earth_radius * (lat_delt + lat_1.cos() * lat_2.cos() * lon_delt).sqrt().asin()
+
+
+def loss_distance(output: torch.Tensor, labels: torch.Tensor):
+    """
+    """
+    tens_slice = 2
+    true_points = labels[:, :tens_slice]
+    true_kernels = labels[:, tens_slice:]
+    out_points = output[:, :tens_slice]
+    out_kernel = output[:, tens_slice:]
+    point_distance = hav_dist(out_points, true_points)
+    kernel_distance = hav_dist(out_kernel, true_kernels)
+    distance = - ((kernel_distance - point_distance) / 65)
+    distance = torch.exp(distance)
+    distance = - torch.log(distance).sum()
+    return distance
+```
+
+
+
+
+## 2.2. Обучение модели
 Ноутбук обучения модели - https://colab.research.google.com/drive/1P5U1bTBNW7W3a6Udq_iU7Qfz0KrmDLnY?usp=sharing
-
-#
-
 
 #
 
