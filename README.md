@@ -75,6 +75,10 @@ https://arxiv.org/abs/2307.05845
 
 Когда изображения получены мы можем их нарезать
 В ноутбуке представлен алгоритм https://colab.research.google.com/drive/1vegzIsvROEeCDyETkuCSxTfxXLYu8TMW?usp=sharing
+<img src="./images/img_slice.PNG" width="600" />
+
+Зеленый - фронт, белый - обратная сторона, красный - боковые стороны. Тонкие линии - центр среза
+
 
 ## 1.2. Формирование описания файлов
 
@@ -83,7 +87,7 @@ https://arxiv.org/abs/2307.05845
 Пример ноутбука для получения геоячеек - классов https://colab.research.google.com/drive/1iEpay-tJHxELrxGen4_y9ktgtzq82R1i?usp=sharing
 
 Наша задача весь объем полученных изображений относительно равномерно разделить на классы
-<img src="./images/map_cluster.png" width="800" />
+<img src="./images/map_cluster.png" width="600" />
 
 Задача будет решена в два этапа
 
@@ -91,7 +95,7 @@ https://arxiv.org/abs/2307.05845
 - передаем центры масс в алгоритм Вороного. Получаем новые замкнутые зоны на карте. Теперь относим точке на карте к соответствующему классу исхдя из полученных зон.
 
 ##
-| <img src="./images/voronoi.png" width="400" /> | <img src="./images/foo.png" width="400" /> | <img src="./images/voronoi_cluster.png" width="400" /> |
+| <img src="./images/voronoi.png" width="200" /> | <img src="./images/foo.png" width="200" /> | <img src="./images/voronoi_cluster.png" width="200" /> |
 
 ##
 
@@ -103,7 +107,6 @@ https://arxiv.org/abs/2307.05845
 
 # 2. Модель
 
-## 2.1. Подготовим loss функцию
 
 ```python
 def hav_dist(points_1: torch.Tensor, points_2: torch.Tensor, earth_radius: int = 6371) -> torch.Tensor:
