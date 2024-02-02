@@ -83,7 +83,7 @@ https://arxiv.org/abs/2307.05845
 Пример ноутбука для получения геоячеек - классов https://colab.research.google.com/drive/1iEpay-tJHxELrxGen4_y9ktgtzq82R1i?usp=sharing
 
 Наша задача весь объем полученных изображений относительно равномерно разделить на классы
-<img src="./images/map_cluster.png" width="600" />
+<img src="./images/map_cluster.png" width="800" />
 
 Задача будет решена в два этапа
 
@@ -91,7 +91,7 @@ https://arxiv.org/abs/2307.05845
 - передаем центры масс в алгоритм Вороного. Получаем новые замкнутые зоны на карте. Теперь относим точке на карте к соответствующему классу исхдя из полученных зон.
 
 ##
-| <img src="./images/voronoi.png" width="200" /> | <img src="./images/foo.png" width="200" /> | <img src="./images/voronoi_cluster.png" width="200" /> |
+| <img src="./images/voronoi.png" width="400" /> | <img src="./images/foo.png" width="400" /> | <img src="./images/voronoi_cluster.png" width="400" /> |
 
 ##
 
