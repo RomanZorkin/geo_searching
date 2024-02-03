@@ -107,6 +107,8 @@ https://arxiv.org/abs/2307.05845
 
 # 2. Модель
 
+## Loss Функция
+
 
 ```python
 def hav_dist(points_1: torch.Tensor, points_2: torch.Tensor, earth_radius: int = 6371) -> torch.Tensor:
@@ -118,20 +120,22 @@ def hav_dist(points_1: torch.Tensor, points_2: torch.Tensor, earth_radius: int =
     return 2 * earth_radius * (lat_delt + lat_1.cos() * lat_2.cos() * lon_delt).sqrt().asin()
 
 
-def loss_distance(output: torch.Tensor, labels: torch.Tensor):
-    """
-    """
+def new_loss(output: torch.Tensor, labels: torch.Tensor, labels_classes: torch.Tensor):
     tens_slice = 2
     true_points = labels[:, :tens_slice]
     true_kernels = labels[:, tens_slice:]
-    out_points = output[:, :tens_slice]
-    out_kernel = output[:, tens_slice:]
-    point_distance = hav_dist(out_points, true_points)
-    kernel_distance = hav_dist(out_kernel, true_kernels)
+
+    probability = output.sigmoid()
+    lbl_idx = probability.argmax(axis=1)
+    prediction = labels_classes[lbl_idx,:]    
+ 
+    point_distance = hav_dist(prediction, true_points)
+    kernel_distance = hav_dist(prediction, true_kernels)
     distance = - ((kernel_distance - point_distance) / 65)
     distance = torch.exp(distance)
-    distance = - torch.log(distance).sum()
-    return distance
+
+    loss = - (probability.log() * distance.unsqueeze(1)).sum()
+    return loss
 ```
 
 
