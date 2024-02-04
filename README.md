@@ -110,6 +110,32 @@ https://arxiv.org/abs/2307.05845
 Реализация модели предсказания заключается в добавлении дополнительного линейного слоя к image encoder модели CLIP от Open AI. 
 
 ```python
+
+class GeoModel(nn.Module):
+    def __init__(self, n_classes):
+        super().__init__()
+        self.input = model.encode_image  # слой CLIP image encoder
+        self.layer_1 = nn.Sequential(
+            nn.Linear(512, 128),
+            nn.ReLU(),
+        )
+        self.layer_2 = nn.Sequential(
+            nn.Linear(128, 32),
+            nn.ReLU(),
+        )
+        self.out = nn.Sequential(
+            nn.Linear(32, n_classes),
+            #nn.Softmax(),
+        )
+
+    def forward(self, x):
+        x = self.input(x)
+        x = x.to(torch.float32)
+        x = self.layer_1(x)
+        x = self.layer_2(x)
+        x = self.out(x)
+        return x
+
 ```
 
 Также необходимо подготовить свою функцию потерь. В оригинальной статье разработана следующая реализация:
