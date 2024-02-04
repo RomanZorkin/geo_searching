@@ -140,7 +140,7 @@ class GeoModel(nn.Module):
 
 Также необходимо подготовить свою функцию потерь. В оригинальной статье разработана следующая реализация:
 
-| <img src="./images/loss_1.png" width="200" /> | <img src="./images/loss_2.png" width="200" /> |
+| <img src="./images/loss_1.png" width="500" /> | <img src="./images/loss_2.png" width="500" /> |
 
 Суть заключается в следующем. Сначала расчитываем расстояние между двумя географическими  точками (haversine distance). 
 
