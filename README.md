@@ -269,7 +269,7 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shu
 
 ## 2.2. Обучение модели
 Ноутбук обучения модели - https://colab.research.google.com/drive/1P5U1bTBNW7W3a6Udq_iU7Qfz0KrmDLnY?usp=sharing
-
+ <img src="./images/train.png" width="600" /> 
 #
 
 
