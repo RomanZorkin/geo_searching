@@ -183,7 +183,88 @@ def new_loss(output: torch.Tensor, labels: torch.Tensor, labels_classes: torch.T
     return loss
 ```
 
+## Функции определения качества, точности
 
+В оригинальной статье для определения точности и качества модели авторы используют показатель разности расстояния между предсказанной точкой и реальной. Попробуем реализовать. 
+
+```python
+
+def acc_foo(output: torch.Tensor, labels: torch.Tensor, labels_classes: torch.Tensor):
+    tens_slice = 2
+    true_points = labels[:, :tens_slice]
+    true_kernels = labels[:, tens_slice:]
+
+    probability = output.sigmoid()
+    lbl_idx = probability.argmax(axis=1)
+    prediction = labels_classes[lbl_idx,:]
+
+    #point_distance = hav_dist(true_points, prediction)
+    #kernel_distance = hav_dist(true_kernels, prediction)
+    point_distance = hav_dist(prediction, true_points)
+    return point_distance
+```
+
+## Мой custom dataloder
+
+Наш датасет не стандартный. Поэтому реализуем свой dataloder
+
+```python
+
+class GeoImageDataset(Dataset):
+    def __init__(
+            self,
+            annotations_file: Path,
+            img_dir: Path,
+            transform=None,
+            target_transform=None,
+            img_idx=0,
+            labels_idx=0,  # индекс лейблов
+            text_idx=1,  # индекс текста
+        ):
+        self.img_labels = pd.read_csv(annotations_file, sep=';')
+        self.img_labels = self.img_labels[self.img_labels.cluster != -1]
+        self.img_dir = img_dir
+        self.transform = transform
+        self.target_transform = target_transform
+        self.img_idx = img_idx
+        self.labels_idx = labels_idx
+        self.text_idx = text_idx
+
+    def __len__(self):
+        return len(self.img_labels)
+
+    def __getitem__(self, idx):
+        img_path = self.img_dir / f'{self.img_labels.iloc[idx, self.img_idx]}.jpg'
+        image = Image.open(img_path)
+        label = self.img_labels.iloc[idx, self.labels_idx]
+        text = self.img_labels.iloc[idx, self.text_idx]
+        text = clip.tokenize(text)
+        if self.transform:
+            image = self.transform(image)
+        if self.target_transform:
+            label = self.target_transform(label)
+        return image, text, label
+
+
+def transform_label(labels: pd.Series):
+    labels = labels.values.astype(np.float32)
+    return torch.Tensor(labels)
+
+
+
+dataset = GeoImageDataset(
+    ds_info_file,  #
+    images_data,
+    preprocess,
+    target_transform=transform_label,
+    labels_idx=[4,5,11,12],
+)
+
+batch_size = 2500
+train_dataset, val_dataset = torch.utils.data.random_split(dataset, [0.8, 0.2])
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
+```
 
 
 ## 2.2. Обучение модели
