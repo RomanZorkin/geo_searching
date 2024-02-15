@@ -122,19 +122,19 @@ https://arxiv.org/abs/2307.05845
 ```python
 
 class GeoModel(nn.Module):
-    def __init__(self, n_classes):
-        super().__init__()
-        self.input = model.encode_image  # слой CLIP image encoder
+    def __init__(self, n_classes):     
+        super().__init__()    
+        self.input = model.encode_image
         self.layer_1 = nn.Sequential(
             nn.Linear(512, 128),
             nn.ReLU(),
         )
         self.layer_2 = nn.Sequential(
-            nn.Linear(128, 32),
+            nn.Linear(128, 640),
             nn.ReLU(),
         )
         self.out = nn.Sequential(
-            nn.Linear(32, n_classes),
+            nn.Linear(640, n_classes),
             #nn.Softmax(),
         )
 
