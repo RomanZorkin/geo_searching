@@ -123,7 +123,16 @@ https://arxiv.org/abs/2307.05845
 # 2. Модель
 
 Реализация модели предсказания заключается в добавлении дополнительного линейного слоя к image encoder модели CLIP от Open AI. 
+```python
+!pip install git+https://github.com/openai/CLIP.git
+import clip
 
+model, preprocess = clip.load("ViT-B/32", device=device)
+# Замораживаем слои CLIP
+for child in model.children():
+    for param in child.parameters():
+        param.requires_grad = False
+```
 ```python
 
 class GeoModel(nn.Module):
