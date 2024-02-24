@@ -326,7 +326,7 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shu
 Т.к. colab ограничивает время и ресурсы, пока не получилось найти рабочую конфигурацию
 
 #
-
-
+После корректировки модели и добавления scheduler (scheduler меняет lr после каждого нового batch) получилось немного улулчшить результаты обучения. loss меняется более плавно, деградация качества также пропало
+ <img src="./images/train_2.png" width="600" /> 
 
 #
