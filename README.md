@@ -328,5 +328,38 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shu
 #
 После корректировки модели и добавления scheduler (scheduler меняет lr после каждого нового batch) получилось немного улулчшить результаты обучения. loss меняется более плавно, деградация качества также пропало
  <img src="./images/train_2.png" width="600" /> 
+```python
+class GeoModel(nn.Module):
+    def __init__(self, n_classes):
+        super().__init__()
+        self.input = model.encode_image
+        self.layer_1 = nn.Sequential(
+            nn.Linear(512, 1000),
+            nn.ReLU(),
+        )
+        self.layer_2 = nn.Sequential(
+            nn.Linear(1000, 1500),
+            nn.ReLU(),
+        )
+        self.out = nn.Sequential(
+            nn.Linear(1500, n_classes),
+            #nn.Softmax(),
+        )
 
+    def forward(self, x):
+        x = self.input(x)
+        x = x.to(torch.float32)
+        x = self.layer_1(x)
+        x = self.layer_2(x)
+        x = self.out(x)
+        return x
+
+
+geo_model = GeoModel(n_classes=labels_classes.shape[0]).to(device)
+loss_fn = new_loss
+learning_rate = 1e-4
+optimizer = torch.optim.Adam(geo_model.parameters(), lr=learning_rate)
+scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
+
+```
 #
